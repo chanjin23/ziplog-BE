@@ -1,0 +1,89 @@
+erDiagram
+    core_legal_dong ||--o| core_region : "bjd_cd"
+    core_legal_dong ||--o{ core_apt_complex : "bjd_cd"
+    core_legal_dong ||--o{ core_apt_trade : "bjd_cd"
+    core_legal_dong ||--o{ core_apt_rent : "bjd_cd"
+    core_region ||--o{ raw_collect_job : "lawd_cd"
+    core_region ||--o{ core_apt_complex : "sgg_cd"
+    raw_collect_job ||--o{ raw_molit_apt_trade_raw : "collect_job_id"
+    raw_collect_job ||--o{ raw_molit_apt_rent_raw : "collect_job_id"
+    core_apt_complex ||--o{ core_apt_trade : "complex_id"
+    core_apt_complex ||--o{ core_apt_rent : "complex_id"
+    raw_molit_apt_trade_raw ||..o| core_apt_trade : "raw_id (정제)"
+    raw_molit_apt_rent_raw ||..o| core_apt_rent : "raw_id (정제)"
+    core_region ||..o{ mart_trade_monthly_sgg : "sgg_cd"
+    core_legal_dong ||..o{ mart_trade_monthly_umd : "bjd_cd"
+    core_apt_complex ||..o{ mart_trade_monthly_complex : "complex_id"
+    core_region ||..o{ mart_rent_monthly_sgg : "sgg_cd"
+    core_legal_dong ||..o{ mart_rent_monthly_umd : "bjd_cd"
+    core_apt_complex ||..o{ mart_rent_monthly_complex : "complex_id"
+
+    core_legal_dong["core.legal_dong"] {
+        varchar(10) bjd_cd PK
+    }
+    core_region["core.region"] {
+        varchar(5) sgg_cd PK
+        varchar(10) bjd_cd FK
+    }
+    raw_collect_job["raw.collect_job"] {
+        bigint collect_job_id PK
+        varchar(5) lawd_cd FK
+    }
+    raw_molit_apt_trade_raw["raw.molit_apt_trade_raw"] {
+        bigint raw_id PK
+        bigint collect_job_id FK,UK
+        integer item_no UK
+    }
+    raw_molit_apt_rent_raw["raw.molit_apt_rent_raw"] {
+        bigint raw_id PK
+        bigint collect_job_id FK,UK
+        integer item_no UK
+    }
+    core_apt_complex["core.apt_complex"] {
+        bigint complex_id PK
+        varchar(5) sgg_cd FK,UK
+        varchar(50) umd_nm UK
+        varchar(10) bjd_cd FK
+        varchar(50) jibun UK
+        varchar(100) apt_nm UK
+        varchar(20) apt_seq UK
+    }
+    core_apt_trade["core.apt_trade"] {
+        bigint trade_id PK
+        bigint complex_id FK
+        varchar(10) bjd_cd FK
+    }
+    core_apt_rent["core.apt_rent"] {
+        bigint rent_id PK
+        bigint complex_id FK
+        varchar(10) bjd_cd FK
+    }
+    mart_trade_monthly_sgg["mart.trade_monthly_sgg"] {
+        varchar(6) deal_ym PK
+        varchar(5) sgg_cd PK
+    }
+    mart_trade_monthly_umd["mart.trade_monthly_umd"] {
+        varchar(6) deal_ym PK
+        varchar(10) bjd_cd PK
+    }
+    mart_trade_monthly_complex["mart.trade_monthly_complex"] {
+        varchar(6) deal_ym PK
+        bigint complex_id PK
+        varchar(10) area_band PK
+    }
+    mart_rent_monthly_sgg["mart.rent_monthly_sgg"] {
+        varchar(6) deal_ym PK
+        varchar(5) sgg_cd PK
+        varchar(10) rent_type PK
+    }
+    mart_rent_monthly_umd["mart.rent_monthly_umd"] {
+        varchar(6) deal_ym PK
+        varchar(10) bjd_cd PK
+        varchar(10) rent_type PK
+    }
+    mart_rent_monthly_complex["mart.rent_monthly_complex"] {
+        varchar(6) deal_ym PK
+        bigint complex_id PK
+        varchar(10) area_band PK
+        varchar(10) rent_type PK
+    }

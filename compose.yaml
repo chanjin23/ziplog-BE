@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: ziplog-db
+    environment:
+      POSTGRES_DB: ziplog
+      POSTGRES_USER: ziplog
+      POSTGRES_PASSWORD: ziplog
+      TZ: Asia/Seoul
+    ports:
+      - "127.0.0.1:5434:5432"
+    volumes:
+      - ziplog-db-data:/var/lib/postgresql/data
+
+volumes:
+  ziplog-db-data:
